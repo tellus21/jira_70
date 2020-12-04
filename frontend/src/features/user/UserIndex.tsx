@@ -37,13 +37,20 @@ const DocktorIndex: React.FC<Props> = (props) => {
             },
             {
                 id: 2,
-                name: "川村　華鈴",
-                nickname: "kawa",
+                name: "大森　麻友",
+                nickname: "mayu",
                 department:"ことに",
                 authority:"管理者",
             },
             {
                 id: 3,
+                name: "亀淵　友紀",
+                nickname: "kame",
+                department:"ことに",
+                authority:"管理者",
+            },
+            {
+                id: 4,
                 name: "工藤　椋介",
                 nickname: "くどう",
                 department:"事務支援",

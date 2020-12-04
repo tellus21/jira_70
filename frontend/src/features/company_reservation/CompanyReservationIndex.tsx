@@ -42,7 +42,7 @@ const CompanyReservationsIndex: React.FC<Props> = (props) => {
   const [state] = React.useState({
     columns: [
       { title: "ID", field: "id" },
-      { title: "会社名", field: "company_name" },
+      { title: "企業名", field: "company_name" },
       { title: "予約年", field: "reservation_year" },
       { title: "パターン", field: "pattern" },
       { title: "支払方法", field: "payment_method" },

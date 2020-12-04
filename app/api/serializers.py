@@ -116,8 +116,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class ProgressSerializer(serializers.ModelSerializer):
     # 選択した数字ではなく、名前で出るようにオーバーライド
-    # examination_type = serializers.CharField(
-    #     source='get_examination_type_display', read_only=True)
+    examination_type = serializers.CharField(
+        source='get_examination_type_display', read_only=True)
     # examination_classification = serializers.CharField(
     #     source='get_examination_classification_display', read_only=True)
     # needs_billing = serializers.CharField(

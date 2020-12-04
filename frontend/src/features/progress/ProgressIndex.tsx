@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import MaterialTable from "material-table";
+import MaterialTable, { MTableToolbar } from "material-table";
 import GenericTemplate from "../templates/GenericTemplate";
 import axios from "axios";
 import {
@@ -16,8 +16,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  FormHelperText
+  FormHelperText,
+  Chip,
+  Grid
 } from "@material-ui/core";
+import MaterialUIPickers from "./MaterialUIPickers"
 
 type Props = {} & RouteComponentProps<{}>;
 
@@ -37,9 +40,24 @@ const useStyles = makeStyles({
   selectEmpty: {
     // marginTop: 4,
   },
+  stickyActionsColumn: {
+    '& table:first-child': {
+      '& tr': {
+        '& td:first-child, th:first-child': {
+          backgroundColor: '#f5f5f5',
+          position: 'sticky',
+          left: 0,
+          zIndex: 999
+        },
+        '& th:first-child': {
+          zIndex: 9999
+        }
+      }
+    }
+  }
 });
 
-const title = "企業マスタ";
+const title = "進捗管理";
 
 const targetURL = `${process.env.REACT_APP_API_URL}/api/progresses/`;
 
@@ -188,7 +206,7 @@ const ProgressIndex: React.FC<Props> = (props) => {
           className={classes.root}
           value="creater"
           control={<Checkbox checked color="primary" size="small" />}
-          label='12/2 kawa'
+          label='12/2 kame'
           labelPlacement="bottom"
         />
       );
@@ -204,16 +222,14 @@ const ProgressIndex: React.FC<Props> = (props) => {
       // { title: "予約システムID", field: " reservation_sys_id", editable: 'onAdd' },
       { title: "受診日", field: "date", editable: 'never' },
       // { title: "カルテ番号", field: "karte_number", editable: 'onUpdate' },
-      { title: "患者名", field: "patient_name", editable: 'onAdd' },
+      { title: "患者名", field: "patient_name", editable: 'never' },
       { title: "受診種別", field: "examination_type", editable: 'never' },
       { title: "コース", field: "course_name", editable: 'never' },
       // { title: "受診区分", field: "examination_classification" },
-      // { title: "企業名", field: "company_name" },
-      { title: "企業名", field: "reservation_sys_company_name", editable: 'never' },
-      { title: "請求書有無", field: "needs_billing", editable: 'onUpdate', lookup: { 1: '未確定', 2: '有', 3: '無' } },
+      { title: "企業名(予約シス)", field: "reservation_sys_company_name", editable: 'never' },
+      { title: "企業予約名", field: "company_name", editable: 'onUpdate' },
+      { title: "請求有無", field: "needs_billing", editable: 'onUpdate', lookup: { 1: '未確定', 2: '有', 3: '無' } },
       { title: "結果送付先", field: "result_destination", editable: 'onUpdate', lookup: { 1: '未確定', 2: '個人', 3: '会社', 4: '個人/会社' } },
-      { title: "備考", field: "remarks", editable: 'onUpdate' },
-      { title: "保険種別", field: "insurance_type",  editable: 'onUpdate', lookup: { 1: '未確定', 2: '特定国保', 3: '特定社保', 4: '協け', 5: '付加対象外' }  },
       { title: "スキャン", field: "has_scanned", editable: 'never' },
       { title: "医師依頼", field: "has_requested_docktor", editable: 'never' },
       { title: "チェック依頼", field: "has_requested_check", editable: 'never' },
@@ -221,10 +237,12 @@ const ProgressIndex: React.FC<Props> = (props) => {
       { title: "最終チェック", field: "has_checked_final", editable: 'never' },
       { title: "結果送付(個人)", field: "has_sent_individual", editable: 'never' },
       { title: "結果送付(企業)", field: "has_sent_company", editable: 'never' },
-      { title: "請求書送付", field: "has_sent_invoice", editable: 'never' },
+      { title: "請求書発送", field: "has_sent_invoice", editable: 'never' },
+      { title: "備考", field: "remarks", editable: 'onUpdate' },
+      { title: "保険種別", field: "insurance_type", editable: 'onUpdate', lookup: { 1: '未確定', 2: '特定国保', 3: '特定社保', 4: '協け', 5: '付加対象外' } },
+      { title: "待ち", field: "next_inspection_name", editable: 'onUpdate' },
       { title: "担当医師", field: "docktor_name", editable: 'onUpdate' },
-      { title: "次の検査", field: "next_inspection_name", editable: 'onUpdate' },
-      // { title: "メモ", field: "memo", editable: 'onUpdate' },
+      { title: "メモ", field: "memo", editable: 'never' },
     ],
   });
 
@@ -296,8 +314,23 @@ const ProgressIndex: React.FC<Props> = (props) => {
           title={title}
           // @ts-ignore
           columns={state.columns}
+          className={classes.stickyActionsColumn}
           data={entries.data}
+          components={{
+            Toolbar: props => (
+              <div>
+                <MTableToolbar {...props} />
+                {/* <MaterialUIPickers label="開始日"/>
+                <MaterialUIPickers label="終了日"/> */}
+                <div style={{ padding: '0px 10px' }}>
+                  <Chip label="完了済表示" color="primary" style={{ marginRight: 5 }} />
+                  <Chip label="削除済表示" color="primary" style={{ marginRight: 5 }} />
+                </div>
+              </div>
+            ),
+          }}
           options={{
+            // fixedColumns: {left: 2},
             exportButton: true,
             search: true,
             selection: true,
